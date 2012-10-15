@@ -1,0 +1,17 @@
+Web app to display the current time and various related statistics
+
+Implemented:
+ - displays current megasecond using local browser clock
+
+Mocked up:
+ - display current time in legacy YYYY MM DD HH MM SS
+ - display legacy time of next megasecond
+
+Todo:
+ - display GPS time
+ - display TAI
+ - render leapseconds with UTC/TAI/UT1 offset graph(s)
+ - render sidereal time (astronomical noon)
+ - WebNTP, calculate offset to reliable server and display it
+ - show server's NTP stats and graphs
+ - show network weather between client and server (estimate delay/jitter)

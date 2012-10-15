@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>megasecond</title>
+<script src="jquery.js"></script>
+<link rel="stylesheet" href="ms.css" />
+<script>
+function setupUpdates() {
+    self.setInterval(function(){update_10ms()}, 100);
+    self.setInterval(function(){update_1s()}, 1000);
+    self.setInterval(function(){update_1hr()}, 60 * 60 * 1000);
+}
+function update_1hr() {
+}
+
+function update_1s() {
+}
+
+self.times = [];
+
+function update_10ms() {
+    t0 = Date.now();
+    n = Date.now();
+    $('#curtime.time').text((n / 1000).toFixed(1));
+    Ms = (n / 1e9);
+    Ks = (n / 1e6).toFixed(0) % 1000;
+    Js = (n / 1e3).toFixed(0) % 1000;
+    while (Js.length < 3) {
+        Js = "0" + Js;
+    }
+    $('#megasecond.time').text(Ms.toFixed(0) + ".");
+    $('#megasecond.subtime').text(Ks + "." + Js);
+    // $('#curtime.
+    t1 = Date.now();
+    e = (t1-t0);
+    self.times.push(e);
+    if (self.times.length > 100) self.times.shift();
+    t = self.times.reduce(function(a,b) { return a+b }) / self.times.length;
+    $('#fps').text('render took ' + t.toFixed(2) +
+                   ' ms, occupancy ' + (t/10).toFixed(0) + '% n=' +
+                   self.times.length);
+}
+setupUpdates();
+</script>
+</head>
+<body>
+
+<div class="box" id="megasecond">
+The current megasecond is <span id="megasecond" class="time"></span><span id="megasecond" class="subtime"></span><br/>
+</div>
+<div class="box" id="curtime">
+Current UNIX time: <div id="curtime" class="time"></div><br/>
+</div>
+<div class="box" id="curtime">
+Current UTC time: <div class="time">2012-09-18 06:26:52</div><br/>
+</div>
+<div class="box" id="curtime">
+Next megasecond at: <div class="time" id="nextmegadate">2012-09-18 20:26:40</div> (14 hours from now)<br/>
+</div>
+<div class="box" id="curtime">
+Previous megasecond at: <div class="time" id="lastmegadate">2012-09-07 06:40:00</div> (11 days ago)<br/>
+</div>
+<div class="box" id="curtime">
+</div>
+<div id='fps'></div>
+</body></html>
