@@ -1,4 +1,4 @@
 body { font-family: sans-serif; }
 .time { font-size: 24pt; }
 .subtime { font-size: 12pt; }
-.box { border: 1px solid rgb(200,200,200); }
+.box { border: 1px solid rgb(200,200,200); width: 300px; }
