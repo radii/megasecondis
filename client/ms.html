@@ -4,39 +4,55 @@
 <script src="jquery.js"></script>
 <link rel="stylesheet" href="ms.css" />
 <script>
+function floor(x) {
+    // brilliantly returns "-0" for [0 .. 0.5) but whatevz.
+    return (x - 0.5).toFixed(0);
+}
+
 function setupUpdates() {
     self.setInterval(function(){update_10ms()}, 100);
-    self.setInterval(function(){update_1s()}, 1000);
-    self.setInterval(function(){update_1hr()}, 60 * 60 * 1000);
 }
 function update_1hr() {
 }
 
-function update_1s() {
+function update_1s(n) {
+    Ms = (n / 1e9);
+    console.debug("Ms = " + Ms);
+    Ks = floor(n / 1e6) % 1000;
+    Ks = pad0(Ks, 3);
+    Js = floor(n / 1e3) % 1000;
+    Js = pad0(Js, 3);
+    $('#megasecond.time').text(floor(Ms) + ".");
+    $('#megasecond.subtime').text(Ks + "." + Js);
 }
 
 self.times = [];
 
+function pad0(s,n) {
+    s = "" + s;
+    while (s.length < n) {
+        s = "0" + s;
+    }
+    return s;
+}
+
 function update_10ms() {
     t0 = Date.now();
     n = Date.now();
-    $('#curtime.time').text((n / 1000).toFixed(1));
-    Ms = (n / 1e9);
-    Ks = (n / 1e6).toFixed(0) % 1000;
-    Js = (n / 1e3).toFixed(0) % 1000;
-    while (Js.length < 3) {
-        Js = "0" + Js;
+    sec = n / 1000;
+    $('#curtime.time').text((sec).toFixed(1));
+    sec = floor(sec);
+    if (self.lastsec != sec) {
+        self.lastsec = sec;
+        update_1s(n);
     }
-    $('#megasecond.time').text(Ms.toFixed(0) + ".");
-    $('#megasecond.subtime').text(Ks + "." + Js);
-    // $('#curtime.
     t1 = Date.now();
     e = (t1-t0);
     self.times.push(e);
     if (self.times.length > 100) self.times.shift();
     t = self.times.reduce(function(a,b) { return a+b }) / self.times.length;
     $('#fps').text('render took ' + t.toFixed(2) +
-                   ' ms, occupancy ' + (t/10).toFixed(0) + '% n=' +
+                   ' ms, occupancy ' + floor(t/10) + '% n=' +
                    self.times.length);
 }
 setupUpdates();
