@@ -15,6 +15,19 @@ function setupUpdates() {
 function update_1hr() {
 }
 
+function update_curtime(n) {
+    d = new Date(n);
+    a = d.getFullYear() + "-" +
+        pad0(d.getMonth(), 2) + "-" +
+        pad0(d.getDate(), 2) + " " +
+        pad0(d.getHours(), 2) + ":" +
+        pad0(d.getMinutes(), 2) + ":" +
+        pad0(d.getSeconds(), 2);
+    console.debug("update_curtime " + a);
+
+    $('#curdate.time').text(a);
+}
+
 function update_1s(n) {
     Ms = (n / 1e9);
     console.debug("Ms = " + Ms);
@@ -24,6 +37,7 @@ function update_1s(n) {
     Js = pad0(Js, 3);
     $('#megasecond.time').text(floor(Ms) + ".");
     $('#megasecond.subtime').text(Ks + "." + Js);
+    update_curtime(n);
 }
 
 self.times = [];
@@ -66,8 +80,8 @@ The current megasecond is <span id="megasecond" class="time"></span><span id="me
 <div class="box" id="curtime">
 Current UNIX time: <div id="curtime" class="time"></div><br/>
 </div>
-<div class="box" id="curtime">
-Current UTC time: <div class="time">2012-09-18 06:26:52</div><br/>
+<div class="box" id="curdate">
+Current UTC time: <div id="curdate" class="time"></div><br/>
 </div>
 <div class="box" id="curtime">
 Next megasecond at: <div class="time" id="nextmegadate">2012-09-18 20:26:40</div> (14 hours from now)<br/>
