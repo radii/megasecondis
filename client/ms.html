@@ -18,7 +18,7 @@ function update_1hr() {
 function update_curtime(n) {
     d = new Date(n);
     a = d.getFullYear() + "-" +
-        pad0(d.getMonth(), 2) + "-" +
+        pad0(d.getMonth() + 1, 2) + "-" +
         pad0(d.getDate(), 2) + " " +
         pad0(d.getHours(), 2) + ":" +
         pad0(d.getMinutes(), 2) + ":" +
