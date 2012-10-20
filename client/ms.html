@@ -28,6 +28,25 @@ function update_curtime(n) {
     $('#curdate.time').text(a);
 }
 
+function update_1hr(n) {
+    day = floor(n / 24 / 60 / 60);
+    if (day != self.lastday) {
+        self.lastday = day;
+        update_1day(n);
+    }
+}
+
+function update_1min(n) {
+    hour = floor(n / 60 / 60);
+    if (hour != self.lasthour) {
+        self.lasthour = hour;
+        update_1hr(n);
+    }
+}
+
+function update_1megasecond(n) {
+}
+
 function update_1s(n) {
     Ms = (n / 1e9);
     console.debug("Ms = " + Ms);
@@ -38,6 +57,16 @@ function update_1s(n) {
     $('#megasecond.time').text(floor(Ms) + ".");
     $('#megasecond.subtime').text(Ks + "." + Js);
     update_curtime(n);
+    minute = floor(n / 60);
+    if (minute != self.lastminute) {
+        self.lastminute = minute;
+        update_1min(n);
+    }
+    megasecond = floor(n / 1000000);
+    if (megasecond != self.lastmegasecond) {
+        self.lastmegasecond = megasecond;
+        update_1megasecond(n);
+    }
 }
 
 self.times = [];
