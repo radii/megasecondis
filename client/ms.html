@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="ms.css" />
 <script>
 function floor(x) {
-    // brilliantly returns "-0" for [0 .. 0.5) but whatevz.
+    if (x < 0.5 && x >= 0) return 0; // work around broken "-0" behavior
     return (x - 0.5).toFixed(0);
 }
 
