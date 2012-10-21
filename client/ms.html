@@ -22,6 +22,15 @@ function format_date(d) {
         pad0(d.getSeconds(), 2);
 }
 
+function format_utc(d) {
+    return d.getUTCFullYear() + "-" +
+        pad0(d.getUTCMonth() + 1, 2) + "-" +
+        pad0(d.getUTCDate(), 2) + " " +
+        pad0(d.getUTCHours(), 2) + ":" +
+        pad0(d.getUTCMinutes(), 2) + ":" +
+        pad0(d.getUTCSeconds(), 2);
+}
+
 function update_1day(s) {
 }
 
@@ -41,27 +50,44 @@ function update_1min(s) {
     }
 }
 
+function timedescription(d) {
+    d = floor(d);
+    if (d < 100) return d + " second" + ((d!=1) ? "s" : "");
+    d = floor(d / 60);
+    if (d < 100) return d + " minute" + ((d!=1) ? "s" : "");
+    d = floor(d / 60);
+    if (d < 50) return d + " hour" + ((d!=1) ? "s" : "");
+    d = floor(d / 24);
+    if (d < 20) return d + " day" + ((d!=1) ? "s" : "");
+    a = floor(d / 7);
+    if (a < 20) return a + " week" + ((a!=1) ? "s" : "");
+    a = floor(d / 30);
+    if (a < 20) return a + " month" + ((a!=1) ? "s" : "");
+    a = floor(d / 365.2422);
+    return a + " year" + ((a!=1) ? "s" : "");
+}
+
 function update_1megasecond(s) {
     megasecond = floor(s / 1000000);
     next_megasecond = (megasecond + 1) * 1000000;
     nmd = new Date(next_megasecond * 1000);
     $('#nextmegadate.time').text(format_date(nmd));
-    hoursdelta = floor((next_megasecond - s) / 60 / 60);
-    $('#nextmegadate.hoursfrom').text(hoursdelta + " hours");
+    $('#nextmegadate.timefrom').text(timedescription(next_megasecond - s));
 
     last_megasecond = megasecond * 1000000;
     lmd = new Date(last_megasecond * 1000);
     $('#lastmegadate.time').text(format_date(lmd));
-    hoursdelta = floor((s - last_megasecond) / 60 / 60);
-    $('#lastmegadate.hoursfrom').text(hoursdelta + " hours");
+    $('#lastmegadate.timefrom').text(timedescription(s - last_megasecond));
 }
 
-function update_curtime(n) {
+function update_curdate(n) {
     d = new Date(n);
-    a = format_date(d);
-    // console.debug("update_curtime " + a);
+    $('#curdate.time').text(format_date(d));
+}
 
-    $('#curdate.time').text(a);
+function update_curutc(n) {
+    d = new Date(n);
+    $('#curutc.time').text(format_utc(d));
 }
 
 function update_1s(n) {
@@ -73,7 +99,8 @@ function update_1s(n) {
     Js = pad0(Js, 3);
     $('#megasecond.time').text(floor(Ms) + ".");
     $('#megasecond.subtime').text(Ks + "." + Js);
-    update_curtime(n);
+    update_curutc(n);
+    update_curdate(n);
     minute = floor(n / 60);
     if (minute != self.lastminute) {
         self.lastminute = minute;
@@ -128,13 +155,16 @@ The current megasecond is <span id="megasecond" class="time"></span><span id="me
 Current UNIX time: <div id="curtime" class="time"></div><br/>
 </div>
 <div class="box" id="curdate">
-Current UTC time: <div id="curdate" class="time"></div><br/>
+Local timezone time: <div id="curdate" class="time"></div><br/>
+</div>
+<div class="box" id="curutc">
+Current UTC time: <div id="curutc" class="time"></div><br/>
 </div>
 <div class="box" id="curtime">
-Next megasecond at: <div class="time" id="nextmegadate">2012-09-18 20:26:40</div> (<span class="hoursfrom" id="nextmegadate">_</span> from now)<br/>
+Next megasecond at: <div class="time" id="nextmegadate">2012-09-18 20:26:40</div> (<span class="timefrom" id="nextmegadate">_</span> from now)<br/>
 </div>
 <div class="box" id="curtime">
-Previous megasecond at: <div class="time" id="lastmegadate">2012-09-07 06:40:00</div> (<span class="hoursfrom" id="lastmegadate">_</span> ago)<br/>
+Previous megasecond at: <div class="time" id="lastmegadate">2012-09-07 06:40:00</div> (<span class="timefrom" id="lastmegadate">_</span> ago)<br/>
 </div>
 <div class="box" id="curtime">
 </div>
