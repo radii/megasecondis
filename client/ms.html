@@ -90,12 +90,14 @@ function update_curutc(n) {
     $('#curutc.time').text(format_utc(d));
 }
 
+// XXX todo make a table, etc
 tai_utc = 35;
 
 function update_taisecs(utc) {
     utc = floor(utc / 1000);
     tai = utc + tai_utc;
     $('#cursecs.time').text(tai);
+    $('#cursecs.skew').text(tai_utc);
 }
 
 function update_1s(n) {
@@ -164,7 +166,7 @@ The current megasecond is <span id="megasecond" class="time"></span><span id="me
 Current UNIX time: <div id="curtime" class="time"></div><br/>
 </div>
 <div class="box" id="totalsecs">
-Seconds since 1970-01-01 00:00 (TAI): <div id="cursecs" class="time"></div><br/>
+Seconds since 1970-01-01 00:00 (TAI): <span id="cursecs" class="time"></span> (<span id="cursecs" class="skew"></span> seconds offset)<br/>
 </div>
 <div class="box" id="curdate">
 Local timezone time: <div id="curdate" class="time"></div><br/>
